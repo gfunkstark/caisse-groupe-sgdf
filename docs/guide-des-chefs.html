@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Caisse d'unité — Guide des chefs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --papier:#F2F3F1; --encre:#14201A; --encre-doux:#5E6B64; --trait:#DDE0DB;
+    --blanc:#FFFFFF; --accent:#1B4F8C; --ok:#2D6A4F; --orange:#B26B00;
+    --orange-bg:#FBEEE0; --orange-trait:#F0D3A8;
+    --serif:'Instrument Serif',Georgia,serif; --sans:Inter,-apple-system,system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{margin:0;background:var(--papier);color:var(--encre);font-family:var(--sans);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  img{max-width:100%}
+  .barre{height:8px;background:var(--accent)}
+  header{background:var(--encre);color:#F2F3F1;padding:34px 22px 40px;text-align:center}
+  .kicker{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#9AA8A0;font-weight:600}
+  header h1{font-family:var(--serif);font-weight:400;font-size:40px;line-height:1.05;margin:10px 0 12px}
+  header p{max-width:34ch;margin:0 auto;color:#C9D2CC;font-size:15px}
+  main{max-width:760px;margin:0 auto;padding:0 18px 60px}
+  .bref{background:var(--blanc);border:1px solid var(--trait);border-radius:16px;padding:20px 20px 8px;margin:-22px 0 34px;box-shadow:0 6px 24px rgba(20,32,26,.06)}
+  .bref h2{font-family:var(--serif);font-weight:400;font-size:24px;margin:0 0 4px}
+  .bref ol{margin:12px 0 8px;padding:0;list-style:none;counter-reset:b}
+  .bref li{counter-increment:b;position:relative;padding:8px 0 8px 40px;font-size:15px;border-top:1px solid var(--trait)}
+  .bref li:first-of-type{border-top:0}
+  .bref li::before{content:counter(b);position:absolute;left:0;top:7px;width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center}
+  section{margin:0 0 44px}
+  .num{display:flex;align-items:center;gap:12px;margin:0 0 6px}
+  .num .chip{flex:none;width:34px;height:34px;border-radius:10px;background:var(--encre);color:#F2F3F1;font-family:var(--serif);font-size:20px;display:flex;align-items:center;justify-content:center}
+  .num .chip.z{background:var(--accent)}
+  h2.titre{font-family:var(--serif);font-weight:400;font-size:27px;margin:0;line-height:1.1}
+  .sous{color:var(--encre-doux);font-size:15px;margin:2px 0 18px}
+  .grille{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start}
+  .col-tel{flex:0 0 232px;max-width:100%;margin:0 auto}
+  .col-txt{flex:1;min-width:240px}
+  .tel{width:232px;border:9px solid #1b1b1b;border-radius:34px;overflow:hidden;background:var(--papier);box-shadow:0 10px 30px rgba(20,32,26,.16);margin:0 auto}
+  .tel .notch{height:22px;background:#1b1b1b;position:relative}
+  .tel .notch::after{content:'';position:absolute;left:50%;top:7px;transform:translateX(-50%);width:64px;height:6px;border-radius:4px;background:#333}
+  .rubanbranche{height:5px;background:var(--accent)}
+  .tete{background:var(--encre);color:#F2F3F1;padding:14px 14px 16px}
+  .tete .u{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#6FA8DC;font-weight:700}
+  .tete .b{font-family:var(--serif);font-size:19px;margin:3px 0 12px}
+  .tete .montant{font-family:var(--serif);font-size:26px;line-height:1;font-variant-numeric:tabular-nums}
+  .tete .lab{font-size:10px;color:#9AA8A0}
+  .tete .jauge{height:5px;background:rgba(255,255,255,.15);border-radius:3px;margin-top:7px;overflow:hidden}
+  .tete .jauge i{display:block;height:100%;width:46%;background:#6FA8DC}
+  .corps{padding:12px}
+  .faux-champ{background:var(--blanc);border:1px solid var(--trait);border-radius:9px;padding:8px 10px;margin-bottom:9px}
+  .faux-champ .fl{font-size:8px;letter-spacing:.04em;text-transform:uppercase;color:var(--encre-doux);font-weight:600}
+  .faux-champ .fv{font-size:13px;margin-top:2px}
+  .faux-champ.gros .fv{font-family:var(--serif);font-size:22px}
+  .duo{display:flex;gap:7px;margin-bottom:9px}
+  .duo button{flex:1;border:1px solid var(--trait);border-radius:8px;background:var(--blanc);font:inherit;font-size:11px;font-weight:600;padding:8px 0;color:var(--encre-doux)}
+  .duo button.on{background:var(--encre);color:#F2F3F1;border-color:var(--encre)}
+  .btn-photo{border:1px dashed var(--trait);border-radius:9px;padding:11px;text-align:center;font-size:11px;font-weight:600;color:var(--encre-doux);margin-bottom:9px}
+  .btn-photo.ok{border-style:solid;border-color:var(--ok);color:var(--ok)}
+  .vign{display:flex;gap:6px;margin-bottom:9px}
+  .vign span{width:34px;height:34px;border-radius:7px;background:#cdd6cf;border:1px solid var(--trait);display:block}
+  .btn-envoi{background:var(--accent);color:#fff;border-radius:10px;text-align:center;font-size:13px;font-weight:600;padding:12px}
+  .pin{letter-spacing:.4em;font-size:26px;text-align:center;padding:10px;border:1px solid var(--trait);border-radius:10px;background:var(--blanc);margin:0 12px 6px}
+  .clavier{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:8px}
+  .clavier b{background:var(--blanc);border:1px solid var(--trait);border-radius:8px;text-align:center;padding:9px 0;font-weight:500;font-size:15px}
+  .lignehist{display:flex;align-items:center;gap:8px;padding:8px 4px;border-top:1px solid var(--trait);font-size:11px}
+  .lignehist:first-child{border-top:0}
+  .lignehist .d{color:var(--encre-doux);width:26px;flex:none}
+  .lignehist .q{flex:1;min-width:0}
+  .lignehist .q b{display:block;font-weight:500;font-size:12px}
+  .lignehist .q i{font-style:normal;color:var(--encre-doux);font-size:10px}
+  .lignehist .s{font-weight:600;font-variant-numeric:tabular-nums}
+  .lignehist.rec .s{color:var(--ok)}
+  .lignehist.warn{background:var(--orange-bg);margin:0 -4px;padding:8px;border-radius:7px}
+  .tagmanque{background:var(--orange-bg);color:var(--orange);border:1px solid var(--orange-trait);border-radius:20px;font-size:9px;font-weight:700;padding:2px 7px;white-space:nowrap}
+  .bandeaualerte{background:var(--orange-bg);border:1px solid var(--orange-trait);color:var(--orange);border-radius:8px;font-size:10px;font-weight:600;padding:8px 10px;margin-bottom:8px}
+  .etapes{margin:0;padding:0;list-style:none;counter-reset:e}
+  .etapes li{counter-increment:e;position:relative;padding:0 0 16px 42px;font-size:15px}
+  .etapes li::before{content:counter(e);position:absolute;left:0;top:-2px;width:28px;height:28px;border-radius:50%;border:2px solid var(--accent);color:var(--accent);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;background:var(--papier)}
+  .etapes li::after{content:'';position:absolute;left:13px;top:28px;bottom:6px;width:2px;background:var(--trait)}
+  .etapes li:last-child::after{display:none}
+  .callout{border-left:3px solid var(--accent);background:var(--blanc);border-radius:0 10px 10px 0;padding:12px 15px;margin:14px 0;font-size:14px}
+  .callout.warn{border-left-color:var(--orange)}
+  .callout.stop{border-left-color:#B3282D}
+  .callout b{display:block;margin-bottom:2px}
+  .os{display:flex;gap:16px;flex-wrap:wrap;margin-top:6px}
+  .oscard{flex:1;min-width:230px;background:var(--blanc);border:1px solid var(--trait);border-radius:14px;padding:16px 18px}
+  .oscard h3{margin:0 0 10px;font-size:15px}
+  .oscard ol{margin:0;padding-left:20px;font-size:14px}
+  .oscard ol li{margin-bottom:7px}
+  .cas{display:flex;gap:16px;flex-wrap:wrap}
+  .cascard{flex:1;min-width:230px;background:var(--blanc);border:1px solid var(--trait);border-radius:14px;padding:16px 18px}
+  .cascard h3{margin:0 0 6px;font-size:16px}
+  .cascard p{margin:0;font-size:14px;color:var(--encre-doux)}
+  .cascard p strong{color:var(--encre)}
+  .or{background:var(--encre);color:#F2F3F1;border-radius:18px;padding:26px 24px}
+  .or h2{font-family:var(--serif);font-weight:400;font-size:26px;margin:0 0 16px;color:#fff}
+  .or ul{margin:0;padding:0;list-style:none;display:grid;gap:12px}
+  .or li{display:flex;gap:11px;align-items:flex-start;font-size:15px;color:#DDE4DE}
+  .or li b{color:#fff;font-weight:600}
+  .or li svg{flex:none;margin-top:2px}
+  footer{text-align:center;color:var(--encre-doux);font-size:13px;padding:30px 20px 10px}
+  footer .s{font-family:var(--serif);font-size:18px;color:var(--encre);display:block;margin-bottom:4px}
+  @media (max-width:540px){header h1{font-size:33px}.col-tel{flex-basis:100%}}
+</style>
+</head>
+<body>
+
+<div class="barre"></div>
+
+<header>
+  <div class="kicker">Scouts et Guides de France</div>
+  <h1>La caisse d'unité,<br>mode d'emploi</h1>
+  <p>Enregistrer les dépenses et recettes de ton unité, avec la photo du ticket, directement depuis ton téléphone.</p>
+</header>
+
+<main>
+
+  <div class="bref">
+    <h2>En bref</h2>
+    <ol>
+      <li>Tu demandes au <strong>trésorier de groupe</strong> de créer ton accès.</li>
+      <li>Il t'envoie <strong>un lien</strong> et <strong>un code à 6 chiffres</strong> par message.</li>
+      <li>Tu ajoutes l'appli à ton écran d'accueil (une fois).</li>
+      <li>Tu saisis ton code — valable 30 jours.</li>
+      <li>À chaque dépense : montant, libellé, photo du ticket. C'est enregistré.</li>
+    </ol>
+  </div>
+
+  <!-- 0 -->
+  <section>
+    <div class="num"><span class="chip z">0</span><h2 class="titre">D'abord, demande ton accès</h2></div>
+    <p class="sous">Il n'y a pas d'inscription à faire soi-même. C'est le trésorier qui t'ajoute.</p>
+    <ul class="etapes">
+      <li>Envoie un message au <strong>trésorier de groupe</strong> avec <strong>ton prénom</strong>, <strong>ton unité</strong> et <strong>ton adresse email</strong>.</li>
+      <li>Il crée ton accès et te renvoie <strong>le lien</strong> de l'appli et <strong>ton code personnel à 6 chiffres</strong>.</li>
+      <li>Tu suis plusieurs unités ? Dis-le : tu recevras <strong>un code par unité</strong>.</li>
+    </ul>
+    <div class="callout"><b>Ne cherche pas de bouton « créer un compte ».</b>L'appli n'en a pas : ton accès est créé par le trésorier.</div>
+  </section>
+
+  <!-- 1 -->
+  <section>
+    <div class="num"><span class="chip">1</span><h2 class="titre">Ouvre le message du trésorier</h2></div>
+    <p class="sous">Il contient ton lien et ton code. Garde-le sous la main.</p>
+    <ul class="etapes">
+      <li>Le <strong>lien</strong> est le même pour tout le groupe. Il ouvre l'appli.</li>
+      <li>Le <strong>code à 6 chiffres</strong> est <strong>personnel</strong> : il ouvre la caisse de <em>ton</em> unité. Ne le partage pas.</li>
+    </ul>
+    <div class="callout warn"><b>Le lien s'ouvre dans le navigateur, pas dans la messagerie.</b>Si tu cliques depuis WhatsApp et que ça coince, choisis « Ouvrir dans le navigateur » (Safari sur iPhone, Chrome sur Android).</div>
+  </section>
+
+  <!-- 2 -->
+  <section>
+    <div class="num"><span class="chip">2</span><h2 class="titre">Installe-la comme une appli</h2></div>
+    <p class="sous">À faire une seule fois. Tu auras une icône, comme une vraie application.</p>
+    <div class="os">
+      <div class="oscard">
+        <h3>iPhone — avec Safari</h3>
+        <ol>
+          <li>Ouvre le lien dans <strong>Safari</strong>.</li>
+          <li>Appuie sur le bouton <strong>Partager</strong> (carré avec une flèche vers le haut).</li>
+          <li>Fais défiler et choisis <strong>« Sur l'écran d'accueil »</strong>, puis <strong>Ajouter</strong>.</li>
+        </ol>
+      </div>
+      <div class="oscard">
+        <h3>iPhone — avec Chrome</h3>
+        <ol>
+          <li>Ouvre le lien dans <strong>Chrome</strong>.</li>
+          <li>Appuie sur l'<strong>icône Partager</strong> (en haut à droite de l'adresse) — pas le menu ⋮.</li>
+          <li>Descends jusqu'à <strong>« En voir plus »</strong>, puis <strong>« Sur l'écran d'accueil »</strong>.</li>
+        </ol>
+      </div>
+      <div class="oscard">
+        <h3>Android — avec Chrome</h3>
+        <ol>
+          <li>Ouvre le lien dans <strong>Chrome</strong>.</li>
+          <li>Menu <strong>⋮</strong> (en haut à droite).</li>
+          <li><strong>« Ajouter à l'écran d'accueil »</strong>, puis confirme.</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 -->
+  <section>
+    <div class="num"><span class="chip">3</span><h2 class="titre">Ouvre ta caisse</h2></div>
+    <p class="sous">Saisis ton code à 6 chiffres. Tu ne le retaperas pas avant 30 jours.</p>
+    <div class="grille">
+      <div class="col-tel">
+        <div class="tel"><div class="notch"></div>
+          <div style="padding:26px 16px 20px;text-align:center">
+            <div style="font-family:var(--serif);font-size:22px;margin-bottom:6px">Caisse d'unité</div>
+            <div style="font-size:12px;color:var(--encre-doux);margin-bottom:16px">Saisis ton code à 6 chiffres.</div>
+            <div class="pin">••••••</div>
+            <div class="btn-envoi" style="margin:6px 12px 0">Ouvrir ma caisse</div>
+            <div style="font-size:11px;color:var(--encre-doux);text-decoration:underline;margin-top:14px">Code oublié ?</div>
+            <div class="clavier"><b>1</b><b>2</b><b>3</b><b>4</b><b>5</b><b>6</b><b>7</b><b>8</b><b>9</b></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-txt">
+        <ul class="etapes">
+          <li>Tape les <strong>6 chiffres</strong> : la caisse s'ouvre au dernier chiffre.</li>
+          <li>L'écran prend <strong>la couleur de ton unité</strong> — tu sais que tu es au bon endroit.</li>
+          <li>C'est mémorisé <strong>30 jours</strong> sur ce téléphone.</li>
+        </ul>
+        <div class="callout"><b>Code oublié ?</b>Appuie sur « Code oublié ? », saisis ton adresse email : ton code t'est renvoyé.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 -->
+  <section>
+    <div class="num"><span class="chip">4</span><h2 class="titre">Enregistrer une dépense</h2></div>
+    <p class="sous">Le geste de tous les jours. Compte 20 secondes.</p>
+    <div class="grille">
+      <div class="col-tel">
+        <div class="tel"><div class="notch"></div>
+          <div class="rubanbranche"></div>
+          <div class="tete"><div class="u">Ton unité</div><div class="b">Bonjour</div>
+            <div class="montant">2 439,50 €</div><div class="lab">restant sur le budget</div>
+            <div class="jauge"><i></i></div></div>
+          <div class="corps">
+            <div class="duo"><button class="on">Dépense</button><button>Recette</button></div>
+            <div class="faux-champ gros"><div class="fl">Montant</div><div class="fv">312,40 €</div></div>
+            <div class="faux-champ"><div class="fl">Libellé</div><div class="fv">Courses Intermarché</div></div>
+            <div class="faux-champ"><div class="fl">Nature</div><div class="fv">Alimentation</div></div>
+            <div class="btn-photo ok">Ajouter un ticket (1 joint)</div>
+            <div class="vign"><span></span></div>
+            <div class="btn-envoi">Enregistrer</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-txt">
+        <ul class="etapes">
+          <li>Vérifie que tu es sur <strong>Dépense</strong> (bouton foncé à gauche).</li>
+          <li>Saisis le <strong>montant</strong> et un <strong>libellé</strong> clair.</li>
+          <li>Choisis la <strong>nature</strong> et le <strong>mode de paiement</strong>.</li>
+          <li>Appuie sur <strong>Ajouter un ticket</strong> → prends la photo du justificatif (tu peux en mettre plusieurs).</li>
+          <li>Appuie sur <strong>Enregistrer</strong>. Le budget se met à jour aussitôt.</li>
+        </ul>
+        <div class="callout stop"><b>La photo du justificatif est obligatoire pour une dépense.</b>Le bouton reste grisé tant qu'il manque le montant, le libellé ou une photo.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 -->
+  <section>
+    <div class="num"><span class="chip">5</span><h2 class="titre">Enregistrer une recette</h2></div>
+    <p class="sous">Vente de gâteaux, extra-job, participation… l'argent qui rentre.</p>
+    <div class="grille">
+      <div class="col-tel">
+        <div class="tel"><div class="notch"></div>
+          <div class="rubanbranche"></div>
+          <div class="tete"><div class="u">Ton unité</div><div class="b">Bonjour</div>
+            <div class="montant">2 619,50 €</div><div class="lab">restant sur le budget</div>
+            <div class="jauge"><i></i></div></div>
+          <div class="corps">
+            <div class="duo"><button>Dépense</button><button class="on">Recette</button></div>
+            <div class="faux-champ gros"><div class="fl">Montant</div><div class="fv">180,00 €</div></div>
+            <div class="faux-champ"><div class="fl">Libellé</div><div class="fv">Vente de gâteaux</div></div>
+            <div class="faux-champ"><div class="fl">Mode d'encaissement</div><div class="fv">SumUp</div></div>
+            <div class="btn-envoi">Enregistrer la recette</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-txt">
+        <ul class="etapes">
+          <li>Bascule sur <strong>Recette</strong> (bouton foncé à droite).</li>
+          <li>Saisis le montant et le libellé.</li>
+          <li>La <strong>nature</strong> et le <strong>mode d'encaissement</strong> proposent des choix adaptés aux recettes.</li>
+          <li>Enregistre. Le solde remonte.</li>
+        </ul>
+        <div class="callout"><b>Pas de photo obligatoire pour une recette.</b>Le justificatif est facultatif ici. Tu peux en ajouter un si tu en as un.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 -->
+  <section>
+    <div class="num"><span class="chip">6</span><h2 class="titre">Compléter un justificatif manquant</h2></div>
+    <p class="sous">Quand le trésorier a saisi une dépense vue sur le compte, mais qu'il manque le ticket.</p>
+    <div class="grille">
+      <div class="col-tel">
+        <div class="tel"><div class="notch"></div>
+          <div class="corps" style="padding-top:16px">
+            <div style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--encre-doux);font-weight:600;margin-bottom:8px">Dernières saisies</div>
+            <div class="bandeaualerte">1 dépense sans justificatif à compléter</div>
+            <div class="lignehist warn"><div class="d">18/07</div><div class="q"><b>Péage A10</b><i>Transport</i></div><span class="tagmanque">justificatif manquant</span><div class="s">−28,40 €</div></div>
+            <div class="lignehist"><div class="d">17/07</div><div class="q"><b>Courses Intermarché</b><i>Alimentation</i></div><div class="s">−312,40 €</div></div>
+            <div class="lignehist rec"><div class="d">16/07</div><div class="q"><b>Vente de gâteaux</b><i>Recette</i></div><div class="s">+180,00 €</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-txt">
+        <ul class="etapes">
+          <li>Un <strong>bandeau orange</strong> indique combien de dépenses attendent leur justificatif.</li>
+          <li>La ligne concernée porte un badge <strong>« justificatif manquant »</strong>.</li>
+          <li><strong>Touche la ligne</strong> : elle remonte dans le formulaire.</li>
+          <li>Appuie sur <strong>Ajouter un ticket</strong>, prends la photo, puis <strong>Mettre à jour</strong>.</li>
+          <li>Le badge disparaît, le compteur descend.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 -->
+  <section>
+    <div class="num"><span class="chip">7</span><h2 class="titre">Les petits plus</h2></div>
+    <div class="cas">
+      <div class="cascard"><h3>Corriger une ligne</h3><p><strong>Touche n'importe quelle ligne</strong> de l'historique pour la rouvrir. Change ce qu'il faut, puis <strong>Mettre à jour</strong>.</p></div>
+      <div class="cascard"><h3>Supprimer une ligne</h3><p>Ouvre la ligne, puis <strong>Supprimer</strong> (bouton rouge). Une confirmation évite les fausses manœuvres.</p></div>
+      <div class="cascard"><h3>Voir un justificatif</h3><p>La petite flèche <strong>↗</strong> au bout d'une ligne ouvre la photo. Un exposant indique s'il y en a plusieurs.</p></div>
+      <div class="cascard"><h3>Changer d'unité</h3><p>Si tu suis deux unités, le bouton <strong>« Changer d'unité »</strong> te ramène à l'écran du code.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="or">
+      <h2>À retenir</h2>
+      <ul>
+        <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7FC0A0" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg><span><b>Un libellé clair à chaque fois.</b> C'est lui qui rend le camp lisible en compta au retour.</span></li>
+        <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7FC0A0" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg><span><b>La photo du ticket tout de suite.</b> Un ticket photographié sur le moment ne se perd pas.</span></li>
+        <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7FC0A0" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg><span><b>Ton code reste secret.</b> Il ouvre ta caisse : on ne le transfère pas dans le groupe.</span></li>
+        <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7FC0A0" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg><span><b>Un doute, une erreur ?</b> Tout se corrige en touchant la ligne. Rien n'est définitif de ton côté.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    <span class="s">Une question ?</span>
+    Écris au trésorier de groupe. Bon camp&nbsp;!
+  </footer>
+
+</main>
+</body>
+</html>

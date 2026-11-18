@@ -15,6 +15,17 @@ caisse de son unité. Sessions de 30 jours, suivi du budget en direct, badge
 
 ---
 
+## Documentation
+
+- **[`docs/manuel-tresorier.md`](docs/manuel-tresorier.md)** — déploiement et
+  utilisation, pour le trésorier.
+- **[`docs/guide-des-chefs.html`](docs/guide-des-chefs.html)** — guide illustré à
+  diffuser aux chefs (ouvrir dans un navigateur ; imprimable en PDF).
+- **[`CONFIGURATION.md`](CONFIGURATION.md)** — ce qu'un autre groupe doit
+  personnaliser.
+
+---
+
 ## Contenu du dépôt
 
 ```
