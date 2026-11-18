@@ -25,7 +25,7 @@
  */
 
 // Dossier Drive où ranger les justificatifs renommés par n° de pièce
-var BACKUP_FOLDER_ID = '1rW0c5si6JPMV7sPKVS6teZpg-lZl3Z3G';
+var BACKUP_FOLDER_ID = '';  // ← ID du dossier Drive de back-up de TON groupe
 
 // Colonnes utilisées (libellés EXACTS de l'onglet Mouvements)
 var BK_COL = {

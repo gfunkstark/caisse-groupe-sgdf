@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="theme-color" content="#14201A">
-<!-- Icône de l'appli sur l'écran d'accueil (logo du groupe SLV) -->
-<link rel="icon" type="image/png" href="https://i.imgur.com/BmNxmdR.png">
-<link rel="apple-touch-icon" href="https://i.imgur.com/BmNxmdR.png">
+<!-- Icône sur l'écran d'accueil : décommente et mets l'URL du logo de ton groupe (image carrée) -->
+<!-- <link rel="icon" type="image/png" href="URL_DU_LOGO"> -->
+<!-- <link rel="apple-touch-icon" href="URL_DU_LOGO"> -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -150,7 +150,7 @@
   <header>
     <div class="entete-haut">
       <div class="marque">
-        <img class="logo" src="https://sites.sgdf.fr/saint-lambert-de-vaugirard-paris-15/wp-content/uploads/sites/49/2018/07/logo_SLV_ROND_rvb-300x287.jpg" alt="" width="34" height="34">
+        <!-- Logo du groupe (optionnel) : <img class="logo" src="URL_DU_LOGO" alt="" width="34" height="34"> -->
         <div class="unite" id="unite"></div>
       </div>
       <button type="button" id="deconnexion" class="deconnexion">Changer d'unité</button>
@@ -330,9 +330,6 @@
     zone.hidden = false;
 
     zone.innerHTML =
-      '<img src="https://sites.sgdf.fr/saint-lambert-de-vaugirard-paris-15/wp-content/uploads/sites/49/2018/07/logo_SLV_ROND_rvb-300x287.jpg" ' +
-      'alt="" width="72" height="72" style="width:72px;height:72px;border-radius:50%;' +
-      'object-fit:cover;display:block;margin:0 auto 14px;background:#fff">' +
       '<p style="font-family:\'Instrument Serif\',Georgia,serif;font-size:28px;' +
       'color:#14201A;margin:0 0 8px">Caisse d\'unité</p>' +
       '<p style="max-width:28ch;margin:0 auto 22px;font-size:14px">' +

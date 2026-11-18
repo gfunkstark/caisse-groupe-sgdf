@@ -35,7 +35,7 @@ var CONFIG = {
   ],
 
   DOSSIER_JUSTIFICATIFS_ID: '',
-  URL_APP: 'https://script.google.com/macros/s/AKfycbz2505m-AMDyZV4K-F8KUs6lsWjHEb2i1BoZDwKqMa92JIkK4_Mc5pvTqQJOpa_1JjLUg/exec',
+  URL_APP: '',  // ← Colle ici l'URL /exec de TON déploiement (voir README)
   HISTORIQUE: 8,
 
   LONGUEUR_CODE: 6,
@@ -71,8 +71,7 @@ var CONFIG = {
     'Guides': '#0F75A8',
     'Pionniers': '#E63118',
     'Caravelles': '#E63118',
-    'Compagnons - Les Verts Solidaires': '#00815A',
-    'Compagnons - Les Compassionnées': '#00815A',
+    'Compagnons': '#00815A',
     'RG': '#4B2E9E'
   }
 };

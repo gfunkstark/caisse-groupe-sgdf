@@ -29,16 +29,17 @@ rester telles quelles.
 
 ## 2. Le logo dans `apps-script/Index.html`
 
-Trois URLs pointent vers le logo du groupe — remplacez-les par **votre** logo
-(une image carrée, idéalement hébergée sur un site stable, pas Google Drive) :
+Par défaut, le template **n'affiche aucun logo**. Pour ajouter celui de votre
+groupe (une image carrée, idéalement hébergée sur un site stable, pas Google
+Drive), trois endroits sont prévus (balises commentées à décommenter) :
 
-- Ligne ~7-8 : `<link rel="icon">` et `<link rel="apple-touch-icon">`
-  (icône sur l'écran d'accueil).
-- Ligne ~153 : le logo dans l'en-tête de l'application.
-- Dans la fonction `demanderCode()` : le logo au-dessus du titre, sur l'écran de
-  saisie du code.
+- En haut du fichier : les deux `<link rel="icon">` / `<link rel="apple-touch-icon">`
+  (icône sur l'écran d'accueil) — remplacez `URL_DU_LOGO`.
+- Dans l'en-tête (`<div class="marque">`) : la balise `<img class="logo">`.
+- Dans la fonction `demanderCode()` : vous pouvez rajouter une `<img>` au-dessus
+  du titre, sur l'écran de saisie du code.
 
-Si vous ne voulez pas de logo, supprimez simplement ces balises `<img>` / `<link>`.
+Sans logo, l'application reste parfaitement fonctionnelle.
 
 ---
 
@@ -66,7 +67,8 @@ paiement diffèrent de ceux de ce template.
 Pour une caisse simple (saisie + budget), il suffit de changer :
 
 1. `CONFIG.COULEURS_BRANCHE` (vos branches),
-2. `CONFIG.URL_APP` (après déploiement),
-3. le logo dans `Index.html` (ou le retirer).
+2. `CONFIG.URL_APP` (après déploiement).
+
+Le logo (`Index.html`) est optionnel — désactivé par défaut.
 
 Tout le reste fonctionne tel quel.
