@@ -136,3 +136,40 @@ function nettoyerNomFichier_(nom) {
     .trim()
     .substring(0, 200);              // limite raisonnable
 }
+
+
+// ─────────────────────────────────────────────────────────────
+//  AUTOMATISATION — déclencheur horaire
+// ─────────────────────────────────────────────────────────────
+/**
+ * Active la sauvegarde automatique : installe un déclencheur horaire qui lance
+ * backupJustificatifs toutes les heures. Les justificatifs des dépenses
+ * comptabilisées par le robot sont alors archivés sans intervention (dans
+ * l'heure qui suit). À lancer UNE fois depuis le menu ; relancer est sans
+ * risque (remplace le déclencheur existant).
+ */
+function installerBackupAutomatique() {
+  ScriptApp.getProjectTriggers().forEach(function (t) {
+    if (t.getHandlerFunction() === 'backupJustificatifs') ScriptApp.deleteTrigger(t);
+  });
+  ScriptApp.newTrigger('backupJustificatifs').timeBased().everyHours(1).create();
+  try {
+    var ui = SpreadsheetApp.getUi();
+    ui.alert('Sauvegarde automatique activée',
+      'Les justificatifs des dépenses comptabilisées seront archivés ' +
+      'automatiquement, toutes les heures. Plus besoin de le lancer à la main.',
+      ui.ButtonSet.OK);
+  } catch (e) { /* hors interface */ }
+}
+
+/** Désactive la sauvegarde automatique (supprime le déclencheur horaire). */
+function desactiverBackupAutomatique() {
+  var n = 0;
+  ScriptApp.getProjectTriggers().forEach(function (t) {
+    if (t.getHandlerFunction() === 'backupJustificatifs') { ScriptApp.deleteTrigger(t); n++; }
+  });
+  try {
+    var ui = SpreadsheetApp.getUi();
+    ui.alert('Sauvegarde automatique désactivée', n + ' déclencheur(s) supprimé(s).', ui.ButtonSet.OK);
+  } catch (e) { /* hors interface */ }
+}

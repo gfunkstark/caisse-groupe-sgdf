@@ -846,5 +846,6 @@ function onOpen() {
     .addSeparator()
     .addItem('Préparer l\'onglet Mouvements', 'creerPageMouvements')
     .addItem('Sauvegarder les justificatifs', 'backupJustificatifs')
+    .addItem('Activer la sauvegarde automatique des justificatifs', 'installerBackupAutomatique')
     .addToUi();
 }
