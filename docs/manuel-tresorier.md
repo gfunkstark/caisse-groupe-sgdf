@@ -98,8 +98,15 @@ Pour pousser automatiquement les dépenses dans **comptaweb** :
      Activité / Branche compta / Détail transaction) et crée les écritures
      (GitHub Actions, 2×/jour ; garde-fou `DRY_RUN`).
 3. Le back-up des justificatifs (`BackupJustificatifs.gs`) tourne côté Apps
-   Script (déclencheur journalier), car un compte de service Google n'a pas de
-   quota Drive.
+   Script (un compte de service Google n'a pas de quota Drive). Deux façons de
+   l'automatiser :
+   - **déclenché par le robot** (recommandé, sans décalage) : menu « Définir le
+     jeton de sauvegarde », puis secrets GitHub `CAISSE_APP_URL` (l'URL /exec de
+     l'app) et `CAISSE_BACKUP_TOKEN` (le jeton affiché). Le robot lance
+     l'archivage en fin de run. *(Nécessite de redéployer l'app en nouvelle
+     version après ajout du point d'entrée.)*
+   - **ou horaire** : menu « Activer la sauvegarde automatique des
+     justificatifs » (archivage toutes les heures, sans secret ni redéploiement).
 
 Le circuit complet (mapping, numéro de pièce `AAAAMMJJ_X` anti-doublon, back-up
 par n° de pièce) est documenté dans le dépôt du robot.

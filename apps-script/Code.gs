@@ -78,12 +78,35 @@ var CONFIG = {
 
 var COL_EMAIL = 0, COL_PRENOM = 1, COL_BRANCHE = 2, COL_BUDGET = 3, COL_CODE = 4, COL_ENVOYE = 5;
 
-function doGet() {
+function doGet(e) {
+  // Déclenchement distant de la sauvegarde par le robot (jeton requis).
+  if (e && e.parameter && e.parameter.action === 'backup') {
+    return reponseJson_(executerBackupDistant_(e.parameter.token));
+  }
   return HtmlService.createTemplateFromFile('Index')
     .evaluate()
     .setTitle('Caisse d\'unité')
     .addMetaTag('viewport', 'width=device-width, initial-scale=1, viewport-fit=cover')
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+}
+
+function reponseJson_(obj) {
+  return ContentService.createTextOutput(JSON.stringify(obj))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+/** Lance backupJustificatifs si le jeton fourni par le robot est valide. */
+function executerBackupDistant_(jeton) {
+  var attendu = PropertiesService.getScriptProperties().getProperty('JETON_BACKUP');
+  if (!attendu || String(jeton || '') !== attendu) {
+    return { ok: false, erreur: 'Jeton invalide ou absent.' };
+  }
+  try {
+    var r = backupJustificatifs();
+    return { ok: true, resultat: r || {} };
+  } catch (err) {
+    return { ok: false, erreur: String(err && err.message || err) };
+  }
 }
 
 function getContexte(session) {
@@ -847,5 +870,6 @@ function onOpen() {
     .addItem('Préparer l\'onglet Mouvements', 'creerPageMouvements')
     .addItem('Sauvegarder les justificatifs', 'backupJustificatifs')
     .addItem('Activer la sauvegarde automatique des justificatifs', 'installerBackupAutomatique')
+    .addItem('Définir le jeton de sauvegarde (robot)', 'definirJetonBackup')
     .addToUi();
 }

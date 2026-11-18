@@ -113,6 +113,7 @@ function backupJustificatifs() {
   var msg = traites + ' ligne(s) sauvegardée(s), ' + copiesTotal + ' fichier(s) copié(s).';
   if (ui) ui.alert('Backup justificatifs', msg, ui.ButtonSet.OK);
   else Logger.log(msg);
+  return { traites: traites, copies: copiesTotal };
 }
 
 function extraireIdDrive_(url) {
@@ -171,5 +172,23 @@ function desactiverBackupAutomatique() {
   try {
     var ui = SpreadsheetApp.getUi();
     ui.alert('Sauvegarde automatique désactivée', n + ' déclencheur(s) supprimé(s).', ui.ButtonSet.OK);
+  } catch (e) { /* hors interface */ }
+}
+
+/**
+ * Génère et enregistre le jeton que le robot doit fournir pour déclencher la
+ * sauvegarde à distance (menu). À copier dans le secret GitHub CAISSE_BACKUP_TOKEN.
+ */
+function definirJetonBackup() {
+  var jeton = '';
+  for (var i = 0; i < 40; i++) jeton += Math.floor(Math.random() * 36).toString(36);
+  PropertiesService.getScriptProperties().setProperty('JETON_BACKUP', jeton);
+  try {
+    var ui = SpreadsheetApp.getUi();
+    ui.alert('Jeton de sauvegarde (robot)',
+      'Copie ce jeton dans le secret GitHub CAISSE_BACKUP_TOKEN :\n\n' + jeton +
+      '\n\nEt mets l\'URL /exec de l\'app dans le secret CAISSE_APP_URL ' +
+      '(menu « Afficher le lien de l\'app »).',
+      ui.ButtonSet.OK);
   } catch (e) { /* hors interface */ }
 }
