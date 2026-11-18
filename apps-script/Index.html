@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="theme-color" content="#14201A">
+<!-- Icône de l'appli sur l'écran d'accueil (logo du groupe SLV) -->
+<link rel="icon" type="image/png" href="https://i.imgur.com/BmNxmdR.png">
+<link rel="apple-touch-icon" href="https://i.imgur.com/BmNxmdR.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --papier:#F2F3F1;
+    --encre:#14201A;
+    --encre-doux:#5E6B64;
+    --trait:#DDE0DB;
+    --blanc:#FFFFFF;
+    --accent:#1B4F8C;
+    --alerte:#B3282D;
+    --ok:#2D6A4F;
+    --rayon:14px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--papier);color:var(--encre);
+    font-family:Inter,-apple-system,system-ui,sans-serif;
+    font-size:16px;line-height:1.45;padding-bottom:40px;-webkit-font-smoothing:antialiased;
+  }
+  .barre{height:6px;background:var(--accent)}
+  header{background:var(--encre);color:var(--papier);padding:22px 20px 26px}
+  .entete-haut{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .marque{display:flex;align-items:center;gap:10px;min-width:0}
+  .logo{
+    flex:none;width:34px;height:34px;border-radius:50%;background:#fff;
+    object-fit:cover;box-shadow:0 0 0 2px rgba(255,255,255,.9);
+  }
+  .unite{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:600;filter:brightness(1.6)}
+  .deconnexion{
+    flex:none;padding:6px 12px;border:1px solid rgba(255,255,255,.22);
+    background:transparent;color:#9AA8A0;border-radius:8px;
+    font:inherit;font-size:12px;font-weight:500;cursor:pointer;
+  }
+  .deconnexion:active{background:rgba(255,255,255,.08)}
+  h1{font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:30px;line-height:1.1;margin:6px 0 20px}
+  .jauge-chiffres{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+  .reste{font-family:'Instrument Serif',Georgia,serif;font-size:38px;line-height:1;font-variant-numeric:tabular-nums}
+  .reste.negatif{color:#FF8A8A}
+  .etiquette{font-size:12px;color:#9AA8A0;letter-spacing:.02em}
+  .jauge{height:6px;background:rgba(255,255,255,.14);border-radius:3px;overflow:hidden}
+  .jauge span{display:block;height:100%;background:var(--accent);filter:brightness(1.5);border-radius:3px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+  .jauge.depasse span{background:#FF8A8A}
+  .detail{margin-top:8px;font-size:12px;color:#9AA8A0;font-variant-numeric:tabular-nums}
+  main{padding:20px 16px 0;max-width:560px;margin:0 auto}
+  .carte{background:var(--blanc);border:1px solid var(--trait);border-radius:var(--rayon);padding:18px 16px;margin-bottom:16px}
+  .bandeau-edition{
+    display:none;align-items:center;gap:8px;padding:10px 13px;margin-bottom:16px;
+    background:var(--papier);border:1px solid var(--trait);border-radius:10px;font-size:13px;color:var(--encre-doux);
+  }
+  .bandeau-edition.visible{display:flex}
+  .bandeau-edition strong{color:var(--encre);font-weight:600}
+  .bascule{display:flex;gap:8px;margin-bottom:18px}
+  .bascule button{
+    flex:1;padding:11px;border:1px solid var(--trait);background:var(--blanc);
+    border-radius:10px;font:inherit;font-weight:500;font-size:14px;color:var(--encre-doux);cursor:pointer;transition:.15s;
+  }
+  .bascule button[aria-pressed="true"]{background:var(--encre);color:var(--papier);border-color:var(--encre)}
+  label{display:block;font-size:12px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:var(--encre-doux);margin:0 0 6px}
+  .requis{text-transform:none;letter-spacing:0;font-weight:500;font-size:11px;color:var(--accent);margin-left:6px}
+  .champ{margin-bottom:16px}
+  input,select,textarea{
+    width:100%;padding:12px 13px;font:inherit;color:var(--encre);
+    background:var(--papier);border:1px solid var(--trait);border-radius:10px;appearance:none;
+  }
+  input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
+  select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235E6B64' stroke-width='1.6' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
+  .montant-champ{position:relative}
+  .montant-champ input{font-family:'Instrument Serif',Georgia,serif;font-size:30px;padding:10px 40px 10px 13px;font-variant-numeric:tabular-nums}
+  .montant-champ::after{content:'€';position:absolute;right:16px;top:50%;transform:translateY(-50%);font-family:'Instrument Serif',Georgia,serif;font-size:26px;color:var(--encre-doux);pointer-events:none}
+  .photo-bouton{
+    display:flex;align-items:center;justify-content:center;gap:8px;padding:13px;
+    border:1px dashed var(--trait);border-radius:10px;background:var(--papier);
+    color:var(--encre-doux);font-size:14px;font-weight:500;cursor:pointer;width:100%;
+  }
+  .photo-bouton.rempli{border-style:solid;border-color:var(--ok);color:var(--ok)}
+  .photo input[type=file]{display:none}
+  .vignettes{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+  .vignettes:empty{display:none}
+  .vignette{position:relative;width:58px;height:58px;border-radius:8px;overflow:hidden;border:1px solid var(--trait);background:var(--papier)}
+  .vignette img{width:100%;height:100%;object-fit:cover;display:block}
+  .vignette .fichier{display:flex;align-items:center;justify-content:center;height:100%;font-size:10px;font-weight:600;color:var(--encre-doux);letter-spacing:.04em;text-decoration:none;text-align:center;padding:4px}
+  .vignette button{position:absolute;top:2px;right:2px;width:19px;height:19px;padding:0;border:0;border-radius:50%;background:rgba(20,32,26,.82);color:#fff;font-size:13px;line-height:19px;cursor:pointer}
+  .envoyer{width:100%;padding:16px;border:0;border-radius:12px;background:var(--accent);color:#fff;font:inherit;font-weight:600;font-size:16px;cursor:pointer;transition:.15s}
+  .envoyer:disabled{opacity:.45;cursor:default}
+  .actions-edition{display:none;gap:8px;margin-top:10px}
+  .actions-edition.visible{display:flex}
+  .actions-edition button{flex:1;padding:13px;border-radius:10px;font:inherit;font-weight:500;cursor:pointer}
+  .annuler{border:1px solid var(--trait);background:var(--blanc);color:var(--encre-doux)}
+  .supprimer{border:1px solid #F0CDCD;background:#FBEAEA;color:var(--alerte);font-weight:600}
+  h2{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--encre-doux);margin:24px 4px 10px;font-weight:600}
+  .ligne{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid var(--trait);cursor:pointer}
+  .ligne:last-child{border-bottom:0}
+  .ligne:active{background:var(--papier)}
+  .ligne.active{background:var(--papier)}
+  .ligne .jour{font-size:12px;color:var(--encre-doux);font-variant-numeric:tabular-nums;width:38px;flex:none}
+  .ligne .quoi{flex:1;min-width:0}
+  .ligne .quoi strong{display:block;font-weight:500;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .ligne .quoi em{font-style:normal;font-size:12px;color:var(--encre-doux)}
+  .ligne .somme{font-variant-numeric:tabular-nums;font-weight:600;font-size:15px}
+  .ligne .somme.credit{color:var(--ok)}
+  .pj{color:var(--encre-doux);flex:none;text-decoration:none;font-size:15px}
+  .manque{
+    flex:none;display:inline-flex;align-items:center;padding:3px 8px;border-radius:20px;
+    background:#FBEEE0;color:#B26B00;border:1px solid #F0D3A8;
+    font-size:11px;font-weight:600;white-space:nowrap;
+  }
+  .ligne.a-completer{background:#FEF8F0}
+  .bandeau-manque{
+    display:none;align-items:center;gap:8px;margin:0 0 10px;padding:11px 14px;border-radius:10px;
+    background:#FBEEE0;border:1px solid #F0D3A8;color:#8A5200;font-size:13px;font-weight:500;
+  }
+  .bandeau-manque.visible{display:flex}
+  .astuce{font-size:12px;color:var(--encre-doux);margin:8px 4px 0;text-align:center}
+  .vide{padding:26px 16px;text-align:center;color:var(--encre-doux);font-size:14px}
+  .message{padding:13px 15px;border-radius:10px;font-size:14px;margin-bottom:16px;display:none}
+  .message.succes{display:block;background:#E7F1EC;color:var(--ok);border:1px solid #C4DFD2}
+  .message.erreur{display:block;background:#FBEAEA;color:var(--alerte);border:1px solid #F0CDCD}
+  .chargement{padding:60px 20px;text-align:center;color:var(--encre-doux)}
+  .voile{
+    position:fixed;inset:0;z-index:60;display:none;flex-direction:column;align-items:center;justify-content:center;
+    gap:18px;padding:32px;text-align:center;background:rgba(242,243,241,.95);
+    -webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);
+  }
+  .voile.visible{display:flex}
+  .voile strong{font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:24px;color:var(--encre)}
+  .voile small{font-size:13px;color:var(--encre-doux);max-width:30ch;line-height:1.5}
+  .rondelle{width:34px;height:34px;border-radius:50%;border:3px solid var(--trait);border-top-color:var(--accent);animation:tourne .8s linear infinite}
+  @keyframes tourne{to{transform:rotate(360deg)}}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}.rondelle{animation-duration:2s}}
+</style>
+</head>
+<body>
+
+<div class="barre"></div>
+
+<div id="chargement" class="chargement">Chargement…</div>
+
+<div id="app" hidden>
+  <header>
+    <div class="entete-haut">
+      <div class="marque">
+        <img class="logo" src="https://sites.sgdf.fr/saint-lambert-de-vaugirard-paris-15/wp-content/uploads/sites/49/2018/07/logo_SLV_ROND_rvb-300x287.jpg" alt="" width="34" height="34">
+        <div class="unite" id="unite"></div>
+      </div>
+      <button type="button" id="deconnexion" class="deconnexion">Changer d'unité</button>
+    </div>
+    <h1 id="salutation"></h1>
+
+    <div id="bloc-budget">
+      <div class="jauge-chiffres">
+        <div class="reste" id="reste"></div>
+        <div class="etiquette">restant sur le budget</div>
+      </div>
+      <div class="jauge" id="jauge"><span style="width:0"></span></div>
+      <div class="detail" id="detail"></div>
+    </div>
+
+    <div id="bloc-sans-budget" style="display:none">
+      <div class="reste" id="total-engage"></div>
+      <div class="etiquette" id="total-etiquette">dépensé</div>
+    </div>
+  </header>
+
+  <main>
+    <div class="message" id="message"></div>
+
+    <div class="carte">
+      <div class="bandeau-edition" id="bandeau-edition">
+        <span>Modification de <strong id="bandeau-libelle"></strong></span>
+      </div>
+
+      <div class="bascule">
+        <button type="button" id="btn-depense" aria-pressed="true">Dépense</button>
+        <button type="button" id="btn-recette" aria-pressed="false">Recette</button>
+      </div>
+
+      <div class="champ montant-champ">
+        <label for="montant">Montant</label>
+        <input type="text" id="montant" inputmode="decimal" placeholder="0,00" autocomplete="off">
+      </div>
+
+      <div class="champ">
+        <label for="libelle">Libellé <span class="requis">obligatoire</span></label>
+        <input type="text" id="libelle" placeholder="Courses Intermarché — samedi" autocomplete="off">
+      </div>
+
+      <div class="champ">
+        <label for="nature">Nature</label>
+        <select id="nature"></select>
+      </div>
+
+      <div class="champ">
+        <label for="date">Date</label>
+        <input type="date" id="date">
+      </div>
+
+      <div class="champ" id="bloc-paiement">
+        <label for="paiement" id="paiement-label">Mode de paiement</label>
+        <select id="paiement"></select>
+      </div>
+
+      <div class="champ">
+        <label>Justificatifs <span class="requis" id="justif-mention">au moins un</span></label>
+        <div class="photo">
+          <div class="vignettes" id="vignettes"></div>
+          <label class="photo-bouton" id="photo-bouton" for="fichier">
+            <span id="photo-texte">Ajouter un ticket</span>
+          </label>
+          <input type="file" id="fichier" accept="image/*,application/pdf" multiple>
+        </div>
+      </div>
+
+      <button class="envoyer" id="envoyer" disabled>Enregistrer</button>
+
+      <div class="actions-edition" id="actions-edition">
+        <button type="button" class="annuler" id="annuler-edition">Annuler</button>
+        <button type="button" class="supprimer" id="supprimer-ligne">Supprimer</button>
+      </div>
+    </div>
+
+    <h2>Dernières saisies</h2>
+    <div class="bandeau-manque" id="bandeau-manque"></div>
+    <div class="carte" style="padding:0" id="historique"></div>
+    <p class="astuce" id="astuce" hidden>Touche une ligne pour la corriger.</p>
+  </main>
+</div>
+
+<div class="voile" id="voile" role="status" aria-live="polite">
+  <div class="rondelle"></div>
+  <strong id="voile-titre">Enregistrement en cours</strong>
+  <small id="voile-detail">Ne ferme pas l'application.</small>
+</div>
+
+<script>
+  var etat = {
+    sens: 'depense', budget: 0, fichiers: [], pieces: [],
+    dernieres: [], edition: null, session: '', appareil: ''
+  };
+  var MAX_FICHIERS = 5;
+
+  function memoriser(cle, valeur){ try { localStorage.setItem(cle, valeur); } catch(e){} }
+  function relire(cle){ try { return localStorage.getItem(cle) || ''; } catch(e){ return ''; } }
+
+  function charger(){
+    google.script.run
+      .withSuccessHandler(demarrer)
+      .withFailureHandler(function(e){ echec(e.message); })
+      .getContexte(etat.session);
+  }
+
+  function echec(texte){
+    document.getElementById('chargement').innerHTML =
+      '<p style="max-width:32ch;margin:0 auto">' + echapper(texte) + '</p>';
+  }
+
+  function demarrer(ctx){
+    if (ctx.erreur) return echec(ctx.erreur);
+    if (ctx.besoinCode) return demanderCode();
+
+    document.documentElement.style.setProperty('--accent', ctx.couleur);
+    document.getElementById('chargement').hidden = true;
+    document.getElementById('app').hidden = false;
+
+    document.getElementById('unite').textContent = ctx.branche;
+    document.getElementById('salutation').textContent =
+      ctx.prenom ? 'Bonjour ' + ctx.prenom : 'Caisse d\'unité';
+
+    etat.budget = ctx.budget;
+    etat.natures = ctx.natures || [];
+    etat.naturesRecette = ctx.naturesRecette || ctx.natures || [];
+    etat.modesPaiement = ctx.modesPaiement || [];
+    etat.modesRecette = ctx.modesRecette || ctx.modesPaiement || [];
+    if (!document.getElementById('date').value){
+      document.getElementById('date').valueAsDate = new Date();
+    }
+
+    rafraichir(ctx);
+    basculer(etat.sens);   // remplit nature + mode de paiement selon dépense/recette
+    verifierFormulaire();
+  }
+
+  function remplirListe(id, valeurs){
+    var select = document.getElementById(id);
+    if (select.options.length) return;
+    select.innerHTML = valeurs.map(function(v){ return '<option>' + echapper(v) + '</option>'; }).join('');
+  }
+
+  // Recharge la liste du mode de paiement selon le sens, en gardant la valeur si possible.
+  function remplirPaiement(valeurs){
+    var select = document.getElementById('paiement');
+    var avant = select.value;
+    select.innerHTML = (valeurs || []).map(function(v){
+      return '<option>' + echapper(v) + '</option>';
+    }).join('');
+    if (avant){
+      for (var i = 0; i < select.options.length; i++){
+        if (select.options[i].value === avant){ select.selectedIndex = i; break; }
+      }
+    }
+  }
+
+  // Recharge la liste des natures selon le sens, en gardant la valeur si possible.
+  function remplirNature(valeurs){
+    var select = document.getElementById('nature');
+    var avant = select.value;
+    select.innerHTML = (valeurs || []).map(function(v){
+      return '<option>' + echapper(v) + '</option>';
+    }).join('');
+    if (avant){
+      for (var i = 0; i < select.options.length; i++){
+        if (select.options[i].value === avant){ select.selectedIndex = i; break; }
+      }
+    }
+  }
+
+  function demanderCode(){
+    document.getElementById('app').hidden = true;
+    var zone = document.getElementById('chargement');
+    zone.hidden = false;
+
+    zone.innerHTML =
+      '<img src="https://sites.sgdf.fr/saint-lambert-de-vaugirard-paris-15/wp-content/uploads/sites/49/2018/07/logo_SLV_ROND_rvb-300x287.jpg" ' +
+      'alt="" width="72" height="72" style="width:72px;height:72px;border-radius:50%;' +
+      'object-fit:cover;display:block;margin:0 auto 14px;background:#fff">' +
+      '<p style="font-family:\'Instrument Serif\',Georgia,serif;font-size:28px;' +
+      'color:#14201A;margin:0 0 8px">Caisse d\'unité</p>' +
+      '<p style="max-width:28ch;margin:0 auto 22px;font-size:14px">' +
+      'Saisis ton code à 6 chiffres pour ouvrir la caisse de ton unité.</p>' +
+      '<input id="code" type="password" inputmode="numeric" pattern="[0-9]*" ' +
+      'maxlength="6" autocomplete="off" placeholder="••••••" ' +
+      'style="width:210px;text-align:center;letter-spacing:.42em;font-size:26px;' +
+      'padding:12px 12px 12px 22px;border:1px solid #DDE0DB;border-radius:10px;' +
+      'font-family:inherit;background:#fff">' +
+      '<div id="code-erreur" style="color:#B3282D;font-size:13px;min-height:20px;' +
+      'margin:12px auto 0;max-width:30ch"></div>' +
+      '<button id="valider-code" style="display:block;margin:6px auto 0;' +
+      'padding:13px 30px;border:0;border-radius:11px;background:#14201A;' +
+      'color:#fff;font:inherit;font-weight:600;cursor:pointer">Ouvrir ma caisse</button>' +
+      '<button id="code-oublie" style="display:block;margin:16px auto 0;' +
+      'background:none;border:0;color:#5E6B64;font:inherit;font-size:13px;' +
+      'text-decoration:underline;cursor:pointer">Code oublié ?</button>';
+
+    var champ = document.getElementById('code');
+    var bouton = document.getElementById('valider-code');
+
+    champ.focus();
+    champ.addEventListener('input', function(){
+      this.value = this.value.replace(/\D/g, '');
+      document.getElementById('code-erreur').textContent = '';
+      if (this.value.length === 6) envoyerCode();
+    });
+    bouton.onclick = envoyerCode;
+    document.getElementById('code-oublie').onclick = demanderEmail;
+
+    function envoyerCode(){
+      var code = champ.value.trim();
+      if (code.length !== 6) return;
+      bouton.disabled = true;
+      bouton.textContent = 'Vérification…';
+      google.script.run
+        .withSuccessHandler(function(res){
+          etat.session = res.session || '';
+          memoriser('caisse_session', etat.session);
+          demarrer(res);
+        })
+        .withFailureHandler(function(e){
+          bouton.disabled = false;
+          bouton.textContent = 'Ouvrir ma caisse';
+          champ.value = '';
+          champ.focus();
+          document.getElementById('code-erreur').textContent = e.message;
+        })
+        .validerCode(code, etat.appareil);
+    }
+  }
+
+  function demanderEmail(){
+    var zone = document.getElementById('chargement');
+    zone.innerHTML =
+      '<p style="font-family:\'Instrument Serif\',Georgia,serif;font-size:26px;' +
+      'color:#14201A;margin:0 0 8px">Code oublié</p>' +
+      '<p style="max-width:30ch;margin:0 auto 22px;font-size:14px">' +
+      'Saisis ton adresse email : ton code te sera renvoyé sur ta boîte.</p>' +
+      '<input id="email" type="email" inputmode="email" autocomplete="email" ' +
+      'placeholder="ton.adresse@email.fr" ' +
+      'style="width:260px;max-width:80vw;text-align:center;font-size:16px;' +
+      'padding:12px;border:1px solid #DDE0DB;border-radius:10px;' +
+      'font-family:inherit;background:#fff">' +
+      '<div id="email-msg" style="font-size:13px;min-height:20px;' +
+      'margin:12px auto 0;max-width:32ch"></div>' +
+      '<button id="valider-email" style="display:block;margin:6px auto 0;' +
+      'padding:13px 30px;border:0;border-radius:11px;background:#14201A;' +
+      'color:#fff;font:inherit;font-weight:600;cursor:pointer">M\'envoyer mon code</button>' +
+      '<button id="retour-code" style="display:block;margin:16px auto 0;' +
+      'background:none;border:0;color:#5E6B64;font:inherit;font-size:13px;' +
+      'text-decoration:underline;cursor:pointer">Retour</button>';
+
+    var champ = document.getElementById('email');
+    var bouton = document.getElementById('valider-email');
+    var msg = document.getElementById('email-msg');
+
+    champ.focus();
+    document.getElementById('retour-code').onclick = demanderCode;
+    bouton.onclick = envoyer;
+    champ.addEventListener('keydown', function(e){ if (e.key === 'Enter') envoyer(); });
+
+    function envoyer(){
+      var email = champ.value.trim();
+      if (!email || email.indexOf('@') < 1){
+        msg.style.color = '#B3282D';
+        msg.textContent = 'Saisis une adresse email valide.';
+        return;
+      }
+      bouton.disabled = true;
+      bouton.textContent = 'Envoi…';
+      google.script.run
+        .withSuccessHandler(function(){
+          msg.style.color = '#2D6A4F';
+          msg.textContent = 'Si ton adresse est enregistrée, tu vas recevoir ' +
+                            'ton code dans quelques instants. Pense à vérifier tes spams.';
+          bouton.style.display = 'none';
+          champ.disabled = true;
+        })
+        .withFailureHandler(function(e){
+          bouton.disabled = false;
+          bouton.textContent = 'M\'envoyer mon code';
+          msg.style.color = '#B3282D';
+          msg.textContent = e.message;
+        })
+        .envoyerCodeParEmail(email);
+    }
+  }
+
+  function rafraichir(donnees){
+    var avecBudget = etat.budget > 0;
+    document.getElementById('bloc-budget').style.display = avecBudget ? '' : 'none';
+    document.getElementById('bloc-sans-budget').style.display = avecBudget ? 'none' : '';
+
+    if (avecBudget){
+      var reste = donnees.reste;
+      var champReste = document.getElementById('reste');
+      champReste.textContent = euros(reste);
+      champReste.classList.toggle('negatif', reste < 0);
+
+      var consomme = Math.min(100, ((etat.budget - reste) / etat.budget) * 100);
+      var jauge = document.getElementById('jauge');
+      jauge.querySelector('span').style.width = Math.max(0, consomme) + '%';
+      jauge.classList.toggle('depasse', reste < 0);
+
+      document.getElementById('detail').textContent =
+        euros(donnees.engage) + ' engagés' +
+        (donnees.recettes ? ' · ' + euros(donnees.recettes) + ' de recettes' : '') +
+        ' · budget ' + euros(etat.budget);
+    } else {
+      var solde = donnees.engage - donnees.recettes;
+      document.getElementById('total-engage').textContent = euros(solde);
+      document.getElementById('total-etiquette').textContent =
+        donnees.recettes
+          ? euros(donnees.engage) + ' dépensés · ' + euros(donnees.recettes) + ' de recettes'
+          : 'dépensé';
+    }
+
+    afficherHistorique(donnees.dernieres);
+
+    // Compteur de justificatifs manquants (sur toute l'unité)
+    var manque = Number(donnees.sansJustif) || 0;
+    var bandeau = document.getElementById('bandeau-manque');
+    if (manque > 0){
+      bandeau.textContent = manque === 1
+        ? '1 dépense sans justificatif à compléter'
+        : manque + ' dépenses sans justificatif à compléter';
+      bandeau.classList.add('visible');
+    } else {
+      bandeau.classList.remove('visible');
+    }
+  }
+
+  function afficherHistorique(lignes){
+    var zone = document.getElementById('historique');
+    etat.dernieres = lignes || [];
+
+    if (!etat.dernieres.length){
+      zone.innerHTML = '<div class="vide">Aucune saisie pour le moment. ' +
+                       'La première dépense apparaîtra ici.</div>';
+      document.getElementById('astuce').hidden = true;
+      return;
+    }
+
+    document.getElementById('astuce').hidden = false;
+
+    zone.innerHTML = etat.dernieres.map(function(l, i){
+      var credit = l.recette > 0;
+      var montant = credit ? l.recette : l.depense;
+      var pieces = String(l.justificatif || '').split('\n').filter(Boolean);
+      var actif = etat.edition && etat.edition.ligne === l.ligne;
+      var aCompleter = !credit && l.depense > 0 && pieces.length === 0;
+
+      return '<div class="ligne' + (actif ? ' active' : '') +
+        (aCompleter ? ' a-completer' : '') + '" data-i="' + i + '">' +
+        '<div class="jour">' + echapper(l.date) + '</div>' +
+        '<div class="quoi"><strong>' + echapper(l.libelle) + '</strong>' +
+        '<em>' + echapper(l.nature) + '</em></div>' +
+        (aCompleter
+          ? '<span class="manque">justificatif manquant</span>'
+          : pieces.length
+            ? '<a class="pj" href="' + pieces[0] + '" target="_blank" rel="noopener" ' +
+              'title="Voir le justificatif">↗' +
+              (pieces.length > 1 ? '<sup>' + pieces.length + '</sup>' : '') + '</a>'
+            : '') +
+        '<div class="somme' + (credit ? ' credit' : '') + '">' +
+          (credit ? '+' : '−') + euros(montant) + '</div>' +
+      '</div>';
+    }).join('');
+
+    Array.prototype.forEach.call(zone.querySelectorAll('.ligne'), function(el){
+      el.onclick = function(e){
+        if (e.target.tagName === 'A' || e.target.parentNode.tagName === 'A') return;
+        ouvrirEdition(Number(this.getAttribute('data-i')));
+      };
+    });
+  }
+
+  function euros(n){
+    return (Math.round(Math.abs(n) * 100) / 100)
+      .toLocaleString('fr-FR', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' €';
+  }
+
+  function suffixeSolde(res){
+    if (etat.budget > 0){
+      return euros(res.reste) + ' restants sur le budget.';
+    }
+    var solde = res.engage - res.recettes;
+    return euros(solde) + ' dépensés au total.';
+  }
+
+  function echapper(t){
+    var d = document.createElement('div');
+    d.textContent = t == null ? '' : t;
+    return d.innerHTML;
+  }
+
+  function ouvrirEdition(i){
+    var l = etat.dernieres[i];
+    if (!l) return;
+
+    etat.edition = { ligne: l.ligne, empreinte: l.empreinte, libelle: l.libelle };
+    etat.pieces = String(l.justificatif || '').split('\n').filter(Boolean);
+    etat.fichiers = [];
+
+    basculer(l.recette > 0 ? 'recette' : 'depense');
+
+    document.getElementById('montant').value =
+      String(l.recette > 0 ? l.recette : l.depense).replace('.', ',');
+    document.getElementById('libelle').value = l.libelle || '';
+    if (l.dateIso) document.getElementById('date').value = l.dateIso;
+    choisirOption('nature', l.nature);
+    choisirOption('paiement', l.modePaiement);
+
+    document.getElementById('bandeau-libelle').textContent = l.libelle || 'cette ligne';
+    document.getElementById('bandeau-edition').classList.add('visible');
+    document.getElementById('actions-edition').classList.add('visible');
+
+    dessinerVignettes();
+    afficherHistorique(etat.dernieres);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function choisirOption(id, valeur){
+    var select = document.getElementById(id);
+    for (var i = 0; i < select.options.length; i++){
+      if (select.options[i].value === String(valeur || '')){ select.selectedIndex = i; return; }
+    }
+  }
+
+  function quitterEdition(){
+    etat.edition = null;
+    etat.pieces = [];
+    document.getElementById('bandeau-edition').classList.remove('visible');
+    document.getElementById('actions-edition').classList.remove('visible');
+    reinitialiser();
+    basculer(etat.sens);
+    afficherHistorique(etat.dernieres);
+  }
+
+  document.getElementById('annuler-edition').onclick = function(){
+    quitterEdition();
+    afficherMessage('', '');
+  };
+
+  document.getElementById('supprimer-ligne').onclick = function(){
+    if (!etat.edition) return;
+    if (!confirm('Supprimer définitivement « ' + etat.edition.libelle + ' » ?')) return;
+    montrerVoile('suppression');
+    google.script.run
+      .withSuccessHandler(function(res){
+        cacherVoile();
+        quitterEdition();
+        rafraichir(res);
+        afficherMessage('succes', 'Ligne supprimée. ' + suffixeSolde(res));
+      })
+      .withFailureHandler(function(e){
+        cacherVoile();
+        afficherMessage('erreur', e.message);
+      })
+      .supprimerMouvement(etat.edition.ligne, etat.edition.empreinte, etat.session);
+  };
+
+  document.getElementById('deconnexion').onclick = function(){
+    if (etat.edition && !confirm('Une modification est en cours. Quitter sans enregistrer ?')){ return; }
+    if (!etat.edition && !confirm('Fermer cette caisse et saisir un autre code ?')){ return; }
+
+    etat.session = '';
+    etat.edition = null;
+    etat.fichiers = [];
+    etat.pieces = [];
+    memoriser('caisse_session', '');
+
+    document.getElementById('bandeau-edition').classList.remove('visible');
+    document.getElementById('actions-edition').classList.remove('visible');
+    afficherMessage('', '');
+    demanderCode();
+  };
+
+  document.getElementById('btn-depense').onclick = function(){ basculer('depense'); };
+  document.getElementById('btn-recette').onclick = function(){ basculer('recette'); };
+
+  function basculer(sens){
+    etat.sens = sens;
+    document.getElementById('btn-depense').setAttribute('aria-pressed', sens === 'depense');
+    document.getElementById('btn-recette').setAttribute('aria-pressed', sens === 'recette');
+
+    // Le mode de paiement reste visible dans les deux cas, avec sa propre liste.
+    remplirNature(sens === 'recette' ? etat.naturesRecette : etat.natures);
+    remplirPaiement(sens === 'recette' ? etat.modesRecette : etat.modesPaiement);
+    document.getElementById('paiement-label').textContent =
+      sens === 'recette' ? 'Mode d\'encaissement' : 'Mode de paiement';
+
+    document.getElementById('envoyer').textContent =
+      etat.edition ? 'Mettre à jour'
+                   : (sens === 'recette' ? 'Enregistrer la recette' : 'Enregistrer');
+    document.getElementById('justif-mention').textContent =
+      sens === 'recette' ? 'facultatif' : 'au moins un';
+    verifierFormulaire();
+  }
+
+  document.getElementById('fichier').addEventListener('change', function(e){
+    var choisis = Array.prototype.slice.call(e.target.files);
+    e.target.value = '';
+    if (!choisis.length) return;
+
+    var total = etat.fichiers.length + etat.pieces.length;
+    if (total + choisis.length > MAX_FICHIERS){
+      afficherMessage('erreur', 'Maximum ' + MAX_FICHIERS + ' justificatifs par ligne.');
+      choisis = choisis.slice(0, MAX_FICHIERS - total);
+      if (!choisis.length) return;
+    }
+
+    choisis.forEach(function(f){
+      if (f.size > 8 * 1024 * 1024){
+        afficherMessage('erreur', echapper(f.name) + ' dépasse 8 Mo. Reprends la photo en qualité réduite.');
+        return;
+      }
+      var lecteur = new FileReader();
+      lecteur.onload = function(){
+        etat.fichiers.push({
+          donnees: lecteur.result.split(',')[1],
+          type: f.type, nom: f.name,
+          apercu: f.type.indexOf('image/') === 0 ? lecteur.result : ''
+        });
+        dessinerVignettes();
+      };
+      lecteur.readAsDataURL(f);
+    });
+  });
+
+  function dessinerVignettes(){
+    var zone = document.getElementById('vignettes');
+    var deja = etat.pieces.map(function(url, i){
+      return '<div class="vignette">' +
+        '<a class="fichier" href="' + url + '" target="_blank" rel="noopener">Pièce ' + (i + 1) + '</a>' +
+        '<button type="button" data-ex="' + i + '" aria-label="Retirer ce justificatif">&times;</button></div>';
+    }).join('');
+
+    var nouvelles = etat.fichiers.map(function(f, i){
+      var contenu = f.apercu ? '<img src="' + f.apercu + '" alt="">' : '<div class="fichier">PDF</div>';
+      return '<div class="vignette">' + contenu +
+             '<button type="button" data-new="' + i + '" aria-label="Retirer ce justificatif">&times;</button></div>';
+    }).join('');
+
+    zone.innerHTML = deja + nouvelles;
+
+    Array.prototype.forEach.call(zone.querySelectorAll('button[data-ex]'), function(b){
+      b.onclick = function(){ etat.pieces.splice(Number(this.getAttribute('data-ex')), 1); dessinerVignettes(); };
+    });
+    Array.prototype.forEach.call(zone.querySelectorAll('button[data-new]'), function(b){
+      b.onclick = function(){ etat.fichiers.splice(Number(this.getAttribute('data-new')), 1); dessinerVignettes(); };
+    });
+
+    var nombre = etat.fichiers.length + etat.pieces.length;
+    document.getElementById('photo-bouton').classList.toggle('rempli', nombre > 0);
+    document.getElementById('photo-texte').textContent =
+      nombre === 0 ? 'Ajouter un ticket'
+                   : 'Ajouter un ticket (' + nombre + ' joint' + (nombre > 1 ? 's' : '') + ')';
+    verifierFormulaire();
+  }
+
+  function formulaireComplet(){
+    return document.getElementById('montant').value.trim() !== '' &&
+           document.getElementById('libelle').value.trim() !== '' &&
+           (etat.sens === 'recette' || etat.fichiers.length + etat.pieces.length > 0);
+  }
+
+  function verifierFormulaire(){
+    var bouton = document.getElementById('envoyer');
+    if (bouton.dataset.envoiEnCours === '1') return;
+    bouton.disabled = !formulaireComplet();
+  }
+
+  ['montant', 'libelle'].forEach(function(id){
+    document.getElementById(id).addEventListener('input', verifierFormulaire);
+  });
+
+  function montrerVoile(mode){
+    var nombre = etat.fichiers.length;
+    var titre = document.getElementById('voile-titre');
+    var detail = document.getElementById('voile-detail');
+
+    if (mode === 'suppression'){
+      titre.textContent = 'Suppression en cours';
+      detail.textContent = 'Ne ferme pas l\'application.';
+    } else if (nombre){
+      titre.textContent = 'Envoi des justificatifs';
+      detail.textContent = nombre + ' photo' + (nombre > 1 ? 's' : '') +
+        ' en cours d\'envoi. Cela peut prendre quelques secondes si le réseau est faible — ne ferme pas l\'application.';
+    } else {
+      titre.textContent = 'Enregistrement en cours';
+      detail.textContent = 'Ne ferme pas l\'application.';
+    }
+    document.getElementById('voile').classList.add('visible');
+  }
+
+  function cacherVoile(){ document.getElementById('voile').classList.remove('visible'); }
+
+  document.getElementById('envoyer').onclick = function(){
+    var bouton = this;
+    var libelle = document.getElementById('libelle').value.trim();
+    var montant = document.getElementById('montant').value.trim();
+
+    if (!montant) return afficherMessage('erreur', 'Indique le montant.');
+    if (!libelle) return afficherMessage('erreur', 'Indique un libellé, sinon la ligne sera illisible en compta.');
+    if (etat.sens !== 'recette' && etat.fichiers.length + etat.pieces.length === 0){
+      return afficherMessage('erreur', 'Ajoute au moins une photo du justificatif avant d\'enregistrer.');
+    }
+
+    var etaitEdition = !!etat.edition;
+    bouton.dataset.envoiEnCours = '1';
+    bouton.disabled = true;
+    bouton.textContent = etaitEdition ? 'Mise à jour…' : 'Enregistrement…';
+    montrerVoile();
+
+    var charge = {
+      date: document.getElementById('date').value,
+      nature: document.getElementById('nature').value,
+      libelle: libelle, montant: montant, sens: etat.sens,
+      modePaiement: document.getElementById('paiement').value,
+      fichiers: etat.fichiers
+    };
+
+    var appel = google.script.run
+      .withSuccessHandler(function(res){
+        cacherVoile();
+        bouton.dataset.envoiEnCours = '';
+        quitterEdition();
+        rafraichir(res);
+        afficherMessage('succes', (etaitEdition ? 'Ligne mise à jour. ' : 'Enregistré. ') + suffixeSolde(res));
+      })
+      .withFailureHandler(function(e){
+        cacherVoile();
+        bouton.dataset.envoiEnCours = '';
+        basculer(etat.sens);
+        verifierFormulaire();
+        afficherMessage('erreur', e.message);
+      });
+
+    if (etaitEdition){
+      charge.ligne = etat.edition.ligne;
+      charge.empreinte = etat.edition.empreinte;
+      charge.justificatifsConserves = etat.pieces.join('\n');
+      appel.modifierMouvement(charge, etat.session);
+    } else {
+      appel.enregistrerMouvement(charge, etat.session);
+    }
+  };
+
+  function reinitialiser(){
+    document.getElementById('montant').value = '';
+    document.getElementById('libelle').value = '';
+    document.getElementById('fichier').value = '';
+    document.getElementById('date').valueAsDate = new Date();
+    etat.fichiers = [];
+    etat.pieces = [];
+    dessinerVignettes();
+  }
+
+  function afficherMessage(type, texte){
+    var zone = document.getElementById('message');
+    if (!type){ zone.className = 'message'; return; }
+    zone.className = 'message ' + type;
+    zone.textContent = texte;
+    window.scrollTo({top:0, behavior:'smooth'});
+    if (type === 'succes'){ setTimeout(function(){ zone.className = 'message'; }, 6000); }
+  }
+
+  etat.session = relire('caisse_session');
+  etat.appareil = relire('caisse_appareil');
+  if (!etat.appareil){
+    etat.appareil = 'a' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+    memoriser('caisse_appareil', etat.appareil);
+  }
+  charger();
+</script>
+</body>
+</html>
